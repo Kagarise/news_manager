@@ -1,0 +1,121 @@
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="bootstrap-4.5.0-dist/css/bootstrap.min.css">
+	<script src="jquery-3.5.1/jquery.js"></script>
+	<script src="bootstrap-4.5.0-dist/js/bootstrap.bundle.min.js"></script>
+	<script src="bootstrap-4.5.0-dist/js/bootstrap.min.js"></script>
+	<title>登录</title>
+	<style type="text/css">
+		body {
+			display: flex;
+			flex-direction: column;
+			min-height: 100vh;
+			box-sizing: border-box;
+		}
+
+		header {
+			height: 60px;
+			display: flex;
+			align-items: center;
+		}
+
+		header>img {
+			margin-top: 50px;
+			padding-left: 20%;
+		}
+
+		footer {
+			height: 200px;
+			display: flex;
+			justify-content: center;
+			align-items: flex-end;
+			color: rgba(0, 0, 0, 0.5);
+		}
+
+		#main {
+			margin-top: 50px;
+			height: 600px;
+			background-image: url(img/banner.jpg);
+			background-repeat: no-repeat;
+			background-size: cover;
+			display: flex;
+			flex-direction: row-reverse;
+			align-items: center;
+		}
+
+		#main>div {
+			width: 380px;
+			height: 70%;
+			padding: 20px;
+			margin-right: 10%;
+			display: flex;
+			flex-direction: column;
+			background-color: white;
+			border-radius: 5%;
+		}
+
+		form {
+			width: 100%;
+			display: flex;
+			flex-direction: column;
+		}
+
+		form>p {
+			font-size: 150%;
+			margin: 10px;
+		}
+
+		.mat {
+			margin-top: 5%;
+		}
+	</style>
+</head>
+
+<body>
+	<header>
+		<img src="img/logo.png" alt="图片">
+	</header>
+
+	<div id="main">
+		<div>
+			<form action="/login">
+				<p><b>后台登录</b></p>
+				<br>
+				<div class="input-group">
+					<div class="input-group-prepend">
+						<span class="input-group-text"><i class="fa fa-user fa-fw"></i></span>
+					</div>
+					<input type="text" class="form-control" name="userName" placeholder="账号">
+				</div>
+				<br>
+				<div class="input-group mat">
+					<div class="input-group-prepend">
+						<span class="input-group-text"><i class="fa fa-lock fa-fw"></i></span>
+					</div>
+					<input type="password" class="form-control" name="userPwd" placeholder="密码">
+				</div>
+				<br>
+				<div class="input-group mat">
+					<div class="input-group-prepend">
+						<span class="input-group-text"><i class="fa fa-pagelines fa-fw"></i></span>
+					</div>
+					<input type="password" class="form-control" placeholder="验证码">
+					&nbsp; &nbsp; &nbsp;
+					<img src="img/img_code.jpg" alt="">
+				</div>
+				<br>
+				<button type="submit" class="btn btn-primary mat">登录</button>
+			</form>
+		</div>
+	</div>
+
+	<footer>
+		版权所有©：郑州轻工业大学 豫LSP备5201314号 未经授权本站内容禁止私自转载使用!
+	</footer>
+</body>
+
+</html>

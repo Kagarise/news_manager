@@ -1,0 +1,329 @@
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="../font-awesome-4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="../bootstrap-4.5.0-dist/css/bootstrap.min.css">
+	<script src="../jquery-3.5.1/jquery.js"></script>
+	<script src="../bootstrap-4.5.0-dist/js/bootstrap.bundle.min.js"></script>
+	<script src="../bootstrap-4.5.0-dist/js/bootstrap.min.js"></script>
+
+	<link href="../bootstrap-table/bootstrap-table.min.css" rel="stylesheet" />
+	<script src="../bootstrap-table/bootstrap-table.js"></script>
+	<script src="../bootstrap-table/locale/bootstrap-table-zh-CN.js"></script>
+
+	<title>栏目管理</title>
+	<style type="text/css">
+		body {
+			display: flex;
+			flex-direction: column;
+			min-height: 100vh;
+		}
+
+		.title {
+			margin-top: 10px;
+			margin-left: 20px;
+			font-size: 20px;
+			display: flex;
+		}
+
+		.title>div:nth-child(1) {
+			flex-grow: 1;
+		}
+
+		.title>div:nth-child(2) {
+			margin-right: 20px;
+			width: 200px;
+		}
+
+		.btn_grp {
+			height: 50px;
+			display: flex;
+			margin: 10px 20px;
+			margin-top: 5px;
+			border: 1px lightgray solid;
+			border-radius: 5px;
+			position: relative;
+		}
+
+		.btn_grp>button {
+			margin: 10px;
+			margin-right: 0px;
+			padding: 5px 10px;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			font-size: small;
+		}
+
+		.list {
+			margin: 10px 20px;
+		}
+
+		tr>th:nth-child(1) {
+			width: 25%;
+		}
+
+		tr>td:nth-child(1) {
+			width: 25%;
+		}
+
+		td {
+			color: #007FB0;
+		}
+
+		td>button {
+			margin-left: 10px;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+
+		td>button:nth-child(4) {
+			margin-right: 10px;
+		}
+
+		.last {
+			color: black;
+		}
+
+		.model-input {
+			width: 80px;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="text-info title">
+		<div>栏目管理</div>
+		<div class="input-group">
+			<input type="text" class="form-control" placeholder="栏目名">
+			<div class="input-group-prepend">
+				<span class="input-group-text"><i class="fa fa-search fa-fw"></i></span>
+			</div>
+		</div>
+	</div>
+	<div class="btn_grp">
+		<button type="button" class="btn btn-success" data-toggle="modal" data-target="#addModal"><i
+				class="fa fa-plus-circle fa-fw"></i>添加</button>
+		<button type="button" class="btn btn-info" data-toggle="modal" data-target="#modModal"><i
+				class="fa fa-edit fa-fw"></i>编辑</button>
+		<button type="button" class="btn btn-warning" data-toggle="modal" data-target="#delModal"><i
+				class="fa fa-minus-circle fa-fw"></i>删除</button>
+		<button type="button" class="btn btn-danger" onclick="batchDelete()"><i
+				class="fa fa-minus-circle fa-fw"></i>批量删除</button>
+	</div>
+	<div class="list">
+		<table id="itemInfoTable" class="table table-hover table-bordered table-striped">
+		</table>
+	</div>
+	<!-- 添加框 -->
+	<div class="modal fade" id="addModal">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<!-- 模态框头部 -->
+				<div class="modal-header">
+					<h4 class="modal-title">添加栏目</h4>
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+				<!-- 模态框主体 -->
+				<div class="modal-body">
+					<form>
+						<!-- 栏目名 -->
+						<div class="input-group mb-3">
+							<div class="input-group-prepend">
+								<span class="input-group-text model-input">栏目名</span>
+							</div>
+							<input type="text" class="form-control" id="addItemName" placeholder="输入栏目名">
+						</div>
+					</form>
+				</div>
+				<!-- 模态框底部 -->
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" data-dismiss="modal" onclick=addItemInfo()>确定</button>
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- 编辑框 -->
+	<div class="modal fade" id="modModal">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<!-- 模态框头部 -->
+				<div class="modal-header">
+					<h4 class="modal-title">编辑栏目</h4>
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+				<!-- 模态框主体 -->
+				<div class="modal-body">
+					<form>
+						<!-- 栏目ID -->
+						<div class="input-group mb-3">
+							<div class="input-group-prepend">
+								<span class="input-group-text model-input">栏目ID</span>
+							</div>
+							<input type="text" class="form-control" id="modItemId" placeholder="输入要修改栏目ID">
+						</div>
+						<!-- 栏目名 -->
+						<div class="input-group mb-3">
+							<div class="input-group-prepend">
+								<span class="input-group-text model-input">栏目名</span>
+							</div>
+							<input type="text" class="form-control" id="modItemName" placeholder="输入新栏目名">
+						</div>
+					</form>
+				</div>
+				<!-- 模态框底部 -->
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" data-dismiss="modal" onclick=modItemInfo()>确定</button>
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- 删除框 -->
+	<div class="modal fade" id="delModal">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<!-- 模态框头部 -->
+				<div class="modal-header">
+					<h4 class="modal-title">删除账户</h4>
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+				<!-- 模态框主体 -->
+				<div class="modal-body">
+					<form>
+						<!-- 栏目ID -->
+						<div class="input-group mb-3">
+							<div class="input-group-prepend">
+								<span class="input-group-text model-input">栏目ID</span>
+							</div>
+							<input type="text" class="form-control" id="delItemId" placeholder="输入栏目ID">
+						</div>
+					</form>
+				</div>
+				<!-- 模态框底部 -->
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" data-dismiss="modal" onclick=delItemInfo()>确定</button>
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+
+</html>
+<script>
+	function addItemInfo() {
+		let itemName = $("#addItemName").val();
+		$.ajax({
+			type: "GET",
+			// url: "http://localhost:8080/newsItem/add?itemName=" + itemName,
+			url: "../newsItem/add?itemName=" + itemName,
+			success: function (msg) {
+				if (msg == "false") {
+					alert("添加失败");
+				} else {
+					alert("添加成功");
+					$('#itemInfoTable').bootstrapTable("refresh");
+				}
+				$("#addItemName").val("");
+			}
+		});
+	}
+
+	function modItemInfo() {
+		let itemId = $("#modItemId").val();
+		let itemName = $("#modItemName").val();
+		$.ajax({
+			type: "GET",
+			// url: "http://localhost:8080/newsItem/update?itemId=" + itemId + "&itemName=" + itemName,
+			url: "../newsItem/update?itemId=" + itemId + "&itemName=" + itemName,
+			success: function (msg) {
+				if (msg == "false") {
+					alert("修改失败");
+				} else {
+					alert("修改成功");
+					$('#itemInfoTable').bootstrapTable("refresh");
+				}
+				$("#modItemId").val("");
+				$("#modItemName").val("");
+			}
+		});
+	}
+
+	function delItemInfo() {
+		let itemId = $("#delItemId").val();
+		$.ajax({
+			type: "GET",
+			// url: "http://localhost:8080/newsItem/delete?itemId=" + itemId,
+			url: "../newsItem/delete?itemId=" + itemId,
+			success: function (msg) {
+				if (msg == "false") {
+					alert("删除失败");
+				} else {
+					alert("删除成功");
+					$('#itemInfoTable').bootstrapTable("refresh");
+				}
+				$("#delItemId").val("");
+			}
+		});
+	}
+
+	function edit(id) {
+		$("#modModal").modal("show");
+		$("#modItemId").val(id);
+	}
+
+	function batchDelete() {
+		var rows = $('#itemInfoTable').bootstrapTable('getSelections');
+		for (var i = 0; i < rows.length; i++) {
+			$.ajax({
+				type: "GET",
+				// url: "http://localhost:8080/newsItem/delete?itemId=" + rows[i].itemId,
+				url: "../newsItem/delete?itemId=" + rows[i].itemId,
+			});
+		}
+		alert("批量删除成功");
+		$('#itemInfoTable').bootstrapTable("refresh");
+	}
+
+	$('#itemInfoTable').bootstrapTable({
+		// url: 'http://localhost:8080/newsItem',
+		url: '../newsItem',
+		pageNumber: 1,
+		pagination: true,
+		sidePagination: 'client',
+		pageSize: 8,
+		pageList: [5, 8, 10],
+		columns: [{
+			checkbox: true
+		}, {
+			field: 'itemId',
+			title: '栏目ID'
+		}, {
+			field: 'itemName',
+			title: '栏目名'
+		}, {
+			field: 'createTime',
+			title: '创建时间'
+		}, {
+			field: 'updateTime',
+			title: '更新时间'
+		}, {
+			field: 'itemId',
+			title: '编辑',
+			formatter: function (val, row, idx) {
+				let e = '<a class="btn btn-waring" href="#" mce_href="#" title="编辑" onclick="edit(\'' +
+					row.itemId +
+					'\')"><i class="fa fa-edit"></i></a> ';
+				return e;
+			}
+		}]
+	});
+</script>

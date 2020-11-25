@@ -1,0 +1,131 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="bootstrap-4.5.0-dist/css/bootstrap.min.css">
+    <script src="jquery-3.5.1/jquery.js"></script>
+    <script src="bootstrap-4.5.0-dist/js/bootstrap.bundle.min.js"></script>
+    <script src="bootstrap-4.5.0-dist/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="layui-v2.5.6/layui/css/layui.css" media="all">
+    <script src="layui-v2.5.6/layui/layui.js" charset="utf-8"></script>
+
+    <title>新闻</title>
+    <style type="text/css">
+        body {
+            margin: 0px;
+        }
+
+        header {
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 100;
+        }
+
+        .row {
+            margin-bottom: 10px;
+        }
+
+        .col-7 {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <!-- <span id="back"><i class="fa fa-chevron-left"></i> 返回</span>
+        <span>校内新闻</span>
+        <span id="close-page">关闭</span> -->
+        <ul class="layui-nav layui-bg-cyan">
+            <li class="layui-nav-item"><a href="./news.html">全部</a></li>
+            <li class="layui-nav-item layui-this"><a href="./news1.html">教务处</a></li>
+            <li class="layui-nav-item"><a href="./news2.html">新闻中心</a></li>
+            <li class="layui-nav-item"><a href="./news3.html">财务处</a></li>
+        </ul>
+    </header>
+    <div class="container-fluid" style="margin-top: 70px">
+        <ul class="flow-default" id="newsList"></ul>
+    </div>
+</body>
+
+</html>
+<script>
+    layui.use('element', function () {
+        let element = layui.element;
+        element.render();
+    });
+    let map = new Map();
+    map.set("springboot学生管理系统后端接口", "http://kagarise.cn/2020/10/11/springboot/");
+    map.set("矩阵链乘问题", "http://kagarise.cn/2020/10/10/mcm/");
+    map.set("循环赛日程表——分治", "http://kagarise.cn/2020/10/08/schedule/");
+    map.set("使用QT设计城市交通咨询模拟系统", "http://kagarise.cn/2020/05/13/QTSSP/");
+    map.set("一元多项式计算器", "http://kagarise.cn/2020/04/20/calculator/");
+    map.set("使用Scrcpy实现PC控制Android设备。", "http://kagarise.cn/2019/12/29/PCcontrolAndroid/");
+    map.set("线段树", "http://kagarise.cn/2019/12/27/IntervalTree/");
+    map.set("猫猫大战", "http://kagarise.cn/2019/12/12/CatBattle/");
+    map.set("2019zzuli进阶组plus3题解", "http://kagarise.cn/2019/11/27/2019zzuliAdvancedGroupPlus3/");
+    map.set("C++ STL stack与queue", "http://kagarise.cn/2019/11/24/C++STL%20stack%E4%B8%8Equeue/");
+    map.set("C++ STL string与vector", "http://kagarise.cn/2019/11/23/C++STL%20string%E4%B8%8Evector/");
+    map.set("C++ STL 初步", "http://kagarise.cn/2019/11/23/C++STL%20%E5%88%9D%E6%AD%A5/");
+    map.set("给github pages绑定域名",
+        "http://kagarise.cn/2019/11/22/%E7%BB%99github%20pages%E7%BB%91%E5%AE%9A%E5%9F%9F%E5%90%8D/");
+    map.set("", "");
+
+    let findUrl = '../news/item/1';
+
+    function reDir(url){
+        window.location.href=url;
+    }
+
+    layui.use('flow', function () {
+        let idx = 0;
+        let flow = layui.flow;
+        let pageSize = 7;
+        flow.load({
+            elem: '#newsList',
+            scrollElem: '#newsList',
+            done: function (page, next) {
+                $.ajax({
+                    type: "GET",
+                    dataType: "json",
+                    data: {
+                        'pageIndex': page,
+                        'pageSize': pageSize
+                    },
+                    async: true,
+                    url: findUrl,
+                    success: function (result) {
+                        let lis = [];
+                        if (idx < result.length) {
+                            for (let cnt = 0; cnt <= pageSize && idx < result
+                                .length; cnt++, idx++) {
+                                let test = 'onclick=reDir("' + map.get(result[idx]
+                                    .newsTitle) + '")'
+                                let newsHtml = '<div class="row" ' + test + '>' +
+                                    '        <div class="col-5">' +
+                                    '            <img src="' + result[idx].newsImage +
+                                    '" class="img-fluid">' +
+                                    '        </div>' +
+                                    '        <div class="col-7">' +
+                                    '            <h4><b>' + result[idx].newsTitle +
+                                    '</b></h4>' +
+                                    '            <span>' + result[idx].createTime +
+                                    '</span>\n' +
+                                    '        </div>' +
+                                    '    </div> '
+                                lis.push(newsHtml);
+                            }
+                            next(lis.join(''), idx < result.length);
+                        }
+                    }
+                });
+            }
+        });
+    });
+</script>

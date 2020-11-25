@@ -1,0 +1,364 @@
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="../font-awesome-4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="../bootstrap-4.5.0-dist/css/bootstrap.min.css">
+	<script src="../jquery-3.5.1/jquery.js"></script>
+	<script src="../bootstrap-4.5.0-dist/js/bootstrap.bundle.min.js"></script>
+	<script src="../bootstrap-4.5.0-dist/js/bootstrap.min.js"></script>
+
+	<link href="../bootstrap-table/bootstrap-table.min.css" rel="stylesheet" />
+	<script src="../bootstrap-table/bootstrap-table.js"></script>
+	<script src="../bootstrap-table/locale/bootstrap-table-zh-CN.js"></script>
+
+	<title>用户管理</title>
+	<style type="text/css">
+		body {
+			display: flex;
+			flex-direction: column;
+			min-height: 100vh;
+		}
+
+		.title {
+			margin-top: 10px;
+			margin-left: 20px;
+			font-size: 20px;
+			display: flex;
+		}
+
+		.title>div:nth-child(1) {
+			flex-grow: 1;
+		}
+
+		.title>div:nth-child(2) {
+			margin-right: 20px;
+			width: 200px;
+		}
+
+		.btn_grp {
+			height: 50px;
+			display: flex;
+			margin: 10px 20px;
+			margin-top: 5px;
+			border: 1px lightgray solid;
+			border-radius: 5px;
+		}
+
+		.btn_grp>button {
+			margin: 10px;
+			margin-right: 0px;
+			padding: 5px 10px;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			font-size: small;
+			position: relative;
+		}
+
+		.btn_grp>button:nth-child(5) {
+			padding-left: 20px;
+			padding-right: 20px;
+			position: absolute;
+			right: 3%;
+		}
+
+		.list {
+			margin: 10px 20px;
+		}
+
+		tr>th:nth-child(1) {
+			width: 25%;
+		}
+
+		tr>td:nth-child(1) {
+			width: 25%;
+		}
+
+		tr>td:nth-child(2) {
+			width: 25%;
+		}
+
+		td {
+			color: #007FB0;
+		}
+
+		td>button {
+			margin-left: 10px;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+
+		td>button:nth-child(4) {
+			margin-right: 10px;
+		}
+
+		.last {
+			color: black;
+		}
+
+		.model-input {
+			width: 80px;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="text-info title">
+		<div>账户管理</div>
+		<div class="input-group">
+			<input type="text" class="form-control" placeholder="用户名">
+			<div class="input-group-prepend">
+				<span class="input-group-text"><i class="fa fa-search fa-fw"></i></span>
+			</div>
+		</div>
+	</div>
+	<div class="btn_grp">
+		<button type="button" class="btn btn-success" data-toggle="modal" data-target="#addModal"><i
+				class="fa fa-plus-circle fa-fw"></i>添加</button>
+		<button type="button" class="btn btn-info" data-toggle="modal" data-target="#modModal"><i
+				class="fa fa-edit fa-fw"></i>编辑</button>
+		<button type="button" class="btn btn-warning" data-toggle="modal" data-target="#delModal"><i
+				class="fa fa-minus-circle fa-fw"></i>删除</button>
+		<button type="button" class="btn btn-danger" onclick="batchDelete()"><i
+				class="fa fa-minus-circle fa-fw"></i>批量删除</button>
+		<button type="button" class="btn btn-warning">账号授权</button>
+	</div>
+	<div class="list">
+		<table id="userInfoTable" class="table table-hover table-bordered table-striped">
+		</table>
+	</div>
+	<!-- 添加框 -->
+	<div class="modal fade" id="addModal">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<!-- 模态框头部 -->
+				<div class="modal-header">
+					<h4 class="modal-title">添加账户</h4>
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+				<!-- 模态框主体 -->
+				<div class="modal-body">
+					<form>
+						<!-- 用户名 -->
+						<div class="input-group mb-3">
+							<div class="input-group-prepend">
+								<span class="input-group-text model-input">用户名</span>
+							</div>
+							<input type="text" class="form-control" id="addUserName" placeholder="输入用户名">
+						</div>
+						<!-- 密码 -->
+						<div class="input-group mb-3">
+							<div class="input-group-append">
+								<span class="input-group-text model-input">密&nbsp;&nbsp;码</span>
+							</div>
+							<input type="password" class="form-control" id="addUserPwd" placeholder="输入密码">
+						</div>
+					</form>
+				</div>
+				<!-- 模态框底部 -->
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" data-dismiss="modal" onclick=addUserInfo()>确定</button>
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+				</div>
+
+			</div>
+		</div>
+	</div>
+	<!-- 编辑框 -->
+	<div class="modal fade" id="modModal">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<!-- 模态框头部 -->
+				<div class="modal-header">
+					<h4 class="modal-title">编辑账户</h4>
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+				<!-- 模态框主体 -->
+				<div class="modal-body">
+					<form>
+						<!-- 用户ID -->
+						<div class="input-group mb-3">
+							<div class="input-group-prepend">
+								<span class="input-group-text model-input">用户ID</span>
+							</div>
+							<input type="text" class="form-control" id="modUserId" placeholder="输入要修改用户ID">
+						</div>
+						<!-- 用户名 -->
+						<div class="input-group mb-3">
+							<div class="input-group-prepend">
+								<span class="input-group-text model-input">用户名</span>
+							</div>
+							<input type="text" class="form-control" id="modUserName" placeholder="输入新用户名">
+						</div>
+						<!-- 密码 -->
+						<div class="input-group mb-3">
+							<div class="input-group-append">
+								<span class="input-group-text model-input">密&nbsp;&nbsp;码</span>
+							</div>
+							<input type="password" class="form-control" id="modUserPwd" placeholder="输入新密码">
+						</div>
+					</form>
+				</div>
+				<!-- 模态框底部 -->
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" data-dismiss="modal" onclick=modUserInfo()>确定</button>
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+				</div>
+
+			</div>
+		</div>
+	</div>
+	<!-- 删除框 -->
+	<div class="modal fade" id="delModal">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<!-- 模态框头部 -->
+				<div class="modal-header">
+					<h4 class="modal-title">删除账户</h4>
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+				<!-- 模态框主体 -->
+				<div class="modal-body">
+					<form>
+						<!-- 用户ID -->
+						<div class="input-group mb-3">
+							<div class="input-group-prepend">
+								<span class="input-group-text model-input">用户ID</span>
+							</div>
+							<input type="text" class="form-control" id="delUserId" placeholder="输入用户ID">
+						</div>
+					</form>
+				</div>
+				<!-- 模态框底部 -->
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" data-dismiss="modal" onclick=delUserInfo()>确定</button>
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+				</div>
+
+			</div>
+		</div>
+	</div>
+</body>
+
+</html>
+<script>
+	function addUserInfo() {
+		let userName = $("#addUserName").val();
+		let userPwd = $("#addUserPwd").val();
+		$.ajax({
+			type: "GET",
+			// url: "http://localhost:8080/user/add?userName=" + userName + "&userPwd=" + userPwd,
+			url: "../user/add?userName=" + userName + "&userPwd=" + userPwd,
+			success: function (msg) {
+				if (msg == "false") {
+					alert("添加失败");
+				} else {
+					alert("添加成功");
+					$('#userInfoTable').bootstrapTable("refresh");
+				}
+				$("#addUserName").val("");
+				$("#addUserPwd").val("");
+			}
+		});
+	}
+
+	function modUserInfo() {
+		let userId = $("#modUserId").val();
+		let userName = $("#modUserName").val();
+		let userPwd = $("#modUserPwd").val();
+		$.ajax({
+			type: "GET",
+			// url: "http://localhost:8080/user/update?userId=" + userId + "&userName=" + userName + "&userPwd=" +
+			// 	userPwd,
+			url: "../user/update?userId=" + userId + "&userName=" + userName + "&userPwd=" +
+					userPwd,
+			success: function (msg) {
+				if (msg == "false") {
+					alert("修改失败");
+				} else {
+					alert("修改成功");
+					$('#userInfoTable').bootstrapTable("refresh");
+				}
+				$("#modUserId").val("");
+				$("#modUserName").val("");
+				$("#modUserPwd").val("");
+			}
+		});
+	}
+
+	function delUserInfo() {
+		let userId = $("#delUserId").val();
+		$.ajax({
+			type: "GET",
+			// url: "http://localhost:8080/user/delete?userId=" + userId,
+			url: "../user/delete?userId=" + userId,
+			success: function (msg) {
+				if (msg == "false") {
+					alert("删除失败");
+				} else {
+					alert("删除成功");
+					$('#userInfoTable').bootstrapTable("refresh");
+				}
+				$("#delUserId").val("");
+			}
+		});
+	}
+
+	function edit(id) {
+		$("#modModal").modal("show");
+		$("#modUserId").val(id);
+	}
+
+	function batchDelete() {
+		var rows = $('#userInfoTable').bootstrapTable('getSelections');
+		for (var i = 0; i < rows.length; i++) {
+			$.ajax({
+				type: "GET",
+				// url: "http://localhost:8080/user/delete?userId=" + rows[i].userId,
+				url: "../user/delete?userId=" + rows[i].userId,
+			});
+		}
+		alert("批量删除成功");
+		$('#userInfoTable').bootstrapTable("refresh");
+	}
+
+	$('#userInfoTable').bootstrapTable({
+		// url: 'http://localhost:8080/user',
+		url: '../user',
+		pageNumber: 1,
+		pagination: true,
+		sidePagination: 'client',
+		pageSize: 8,
+		pageList: [5, 8, 10],
+		columns: [{
+			checkbox: true
+		}, {
+			field: 'userId',
+			title: '用户ID'
+		}, {
+			field: 'userName',
+			title: '用户名'
+		}, {
+			field: 'createTime',
+			title: '创建时间'
+		}, {
+			field: 'updateTime',
+			title: '更新时间'
+		}, {
+			field: 'userId',
+			title: '编辑',
+			formatter: function (val, row, idx) {
+				let e = '<a class="btn btn-waring" href="#" mce_href="#" title="编辑" onclick="edit(\'' +
+					row.userId +
+					'\')"><i class="fa fa-edit"></i></a> ';
+				return e;
+			}
+		}]
+	});
+</script>

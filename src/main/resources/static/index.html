@@ -1,0 +1,169 @@
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css">
+		<link rel="stylesheet" href="bootstrap-4.5.0-dist/css/bootstrap.min.css">
+		<script src="jquery-3.5.1/jquery.js"></script>
+		<script src="bootstrap-4.5.0-dist/js/bootstrap.bundle.min.js"></script>
+		<script src="bootstrap-4.5.0-dist/js/bootstrap.min.js"></script>
+		<title>主页</title>
+		<style type="text/css">
+			body {
+				display: flex;
+				flex-direction: column;
+				min-height: 100vh;
+			}
+
+			header {
+				height: 80px;
+				background-color: #007FB0;
+				display: flex;
+				align-items: center;
+				padding-left: 40px;
+			}
+
+			#pre {
+				height: 30px;
+				display: flex;
+				background-color: #EEEEEE;
+				margin-bottom: 0px;
+			}
+
+			#pre>div:nth-child(1) {
+				width: 200px;
+				border-bottom: 1px darkgray solid;
+				border-right: 1px darkgray solid;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+			}
+
+			#pre>div:nth-child(2) {
+				border-bottom: 1px darkgray solid;
+				flex-grow: 1;
+				display: flex;
+				align-items: center;
+				padding-left: 10px;
+				color: rgba(0, 0, 0, 0.5);
+			}
+
+			#main {
+				flex-grow: 1;
+				display: flex;
+			}
+
+			#left {
+				background-color: #EEEEEE;
+			}
+
+			#left {
+				width: 200px;
+				flex-shrink: 0;
+				display: flex;
+				flex-direction: column;
+			}
+
+			#left>p {
+				height: 40px;
+				padding: 0px;
+				margin: 0px;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				border-bottom: 1px darkgray solid;
+			}
+
+			#left>a {
+				height: 50px;
+				background-color: #EEEEEE;
+				border-bottom: 1px darkgray solid;
+				border-right: 1px darkgray solid;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				text-decoration: none;
+				color: #007FB0;
+			}
+
+			#left>a:hover {
+				background-color: white;
+				border-right: none;
+			}
+
+			#left>a:nth-child(1) {
+				background-color: white;
+				border-right: none;
+				background-image: url(img/icon_01.png);
+				background-repeat: no-repeat;
+				background-position: 40px 18px;
+			}
+
+			#left>a:nth-child(2) {
+				background-image: url(img/icon_02.png);
+				background-repeat: no-repeat;
+				background-position: 40px 18px;
+			}
+
+			#left>a:nth-child(3) {
+				background-image: url(img/icon_03.png);
+				background-repeat: no-repeat;
+				background-position: 40px 18px;
+			}
+
+			#content {
+				flex-grow: 1;
+			}
+			iframe{
+				min-width: 500px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header>
+			<img src="img/tit.png">
+		</header>
+		<div id="pre">
+			<div>当前用户：管理员Ray</div>
+			<div id="page">当前页面：账户管理</div>
+		</div>
+		<div id="main">
+			<div id="left">
+				<a href="pages/userManager.html" target="myFrame" id="zh">账户管理</a>
+				<a href="pages/itemManager.html" target="myFrame" id="lm">栏目管理</a>
+				<a href="pages/newsManager.html" target="myFrame" id="xw">新闻管理</a>
+			</div>
+			<iframe id="content" frameborder="0" name="myFrame" src="pages/userManager.html"></iframe>
+		</div>
+	</body>
+
+</html>
+<script>
+	$("#zh").click(function() {
+		document.getElementById('page').innerHTML = "当前页面：账户管理";
+		change();
+		document.getElementById('zh').style.backgroundColor = "white";
+		document.getElementById('zh').style.borderRight = "none";
+	})
+	$("#lm").click(function() {
+		document.getElementById('page').innerHTML = "当前页面：栏目管理";
+		change();
+		document.getElementById('lm').style.backgroundColor = "white";
+		document.getElementById('lm').style.borderRight = "none";
+	})
+	$("#xw").click(function() {
+		document.getElementById('page').innerHTML = "当前页面：新闻管理";
+		change();
+		document.getElementById('xw').style.backgroundColor = "white";
+		document.getElementById('xw').style.borderRight = "none";
+	})
+	function change() {
+		$("a").each(function() {
+			this.style.backgroundColor = "#EEEEEE";
+			this.style.borderRight = "1px darkgray solid";
+			this.style.borderBottom = "1px darkgray solid";
+		})
+	}
+</script>

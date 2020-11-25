@@ -1,0 +1,144 @@
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="../font-awesome-4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="../bootstrap-4.5.0-dist/css/bootstrap.min.css">
+	<script src="../jquery-3.5.1/jquery.js"></script>
+	<script src="../bootstrap-4.5.0-dist/js/bootstrap.bundle.min.js"></script>
+	<script src="../bootstrap-4.5.0-dist/js/bootstrap.min.js"></script>
+	<title>新闻管理</title>
+	<style type="text/css">
+		body {
+			display: flex;
+			flex-direction: column;
+			min-height: 100vh;
+		}
+
+		.title {
+			margin-top: 10px;
+			margin-left: 20px;
+			font-size: 20px;
+			display: flex;
+		}
+
+		.title>div:nth-child(1) {
+			flex-grow: 1;
+		}
+
+		.title>div:nth-child(2) {
+			margin-right: 20px;
+			width: 300px;
+			display: flex;
+		}
+
+		.main {
+			margin: 20px;
+			height: 500px;
+			display: flex;
+			flex-direction: column;
+			border: 1px lightgray solid;
+		}
+
+		.head {
+			height: 30px;
+			border-bottom: 1px lightgray solid;
+			display: flex;
+			align-items: center;
+			padding: 10px;
+			background-color: rgb(236, 236, 236);
+			color: #007FB0;
+		}
+
+		.content {
+			margin: 15px;
+			margin-bottom: 0px;
+			width: 80%;
+		}
+
+		.last {
+			width: 20%;
+			margin-left: 40px;
+			margin-top: 20px;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="text-info title">
+		<div>新闻管理</div>
+		<div class="input-group">
+			<select name="organ" class="form-control">
+				<option value="jwc">教务处</option>
+				<option value="xwzx">新闻中心</option>
+				<option value="cwc">财务处</option>
+			</select>
+			<input type="text" class="form-control" placeholder="用户名">
+			<div class="input-group-prepend">
+				<span class="input-group-text"><i class="fa fa-search fa-fw"></i></span>
+			</div>
+		</div>
+	</div>
+	<div class="main">
+		<div class="head">
+			发布新闻
+		</div>
+		<div class="input-group content">
+			<div class="input-group-prepend">
+				<span class="input-group-text">标题</span>
+			</div>
+			<input type="text" class="form-control" id="newsTitle" placeholder="编写标题">
+		</div>
+		<div class="input-group content">
+			<div class="input-group-prepend">
+				<span class="input-group-text">图片</span>
+			</div>
+			<input type="text" class="form-control" id="newsImage" placeholder="图片url">
+		</div>
+		<div class="input-group content">
+			<div class="input-group-prepend">
+				<span class="input-group-text">栏目</span>
+			</div>
+			<select id="itemId" class="form-control">
+				<option value="1">教务处</option>
+				<option value="2">新闻中心</option>
+				<option value="3">财务处</option>
+			</select>
+		</div>
+		<div class="input-group content">
+			<div class="input-group-append">
+				<span class="input-group-text">正文</span>
+			</div>
+			<textarea class="form-control" id="newsContent" rows="8" placeholder="编写正文"></textarea>
+		</div>
+		<button type="button" class="btn btn-primary last" onclick="submit()">发&nbsp;&nbsp;&nbsp;&nbsp;布</button>
+	</div>
+</body>
+
+</html>
+<script>
+	function submit() {
+		let itemId = $("#itemId").val();
+		let newsTitle = $("#newsTitle").val();
+		let newsImage = $("#newsImage").val();
+		let newsContent = $("#newsContent").val();
+		$.ajax({
+			type: "GET",
+			url: "../news/add?itemId=" + itemId + "&newsTitle=" + newsTitle + "&newsImage=" + newsImage +
+				"&newsContent=" +
+				newsContent,
+			success: function (msg) {
+				if (msg == "false") {
+					alert("发布失败");
+				} else {
+					alert("发布成功");
+				}
+				$("itemId").val("1");
+				$("#newsTitle").val("");
+				$("#newsImage").val("");
+				$("#newsContent").val("");
+			}
+		});
+	}
+</script>
